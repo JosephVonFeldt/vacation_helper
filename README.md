@@ -1,1 +1,1 @@
-"# vacation_helper" 
+# vacation_helper
