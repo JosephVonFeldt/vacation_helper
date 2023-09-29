@@ -1,46 +1,23 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
+from flask_restful import Api, Resource
+from backend.dataCollector import VacationFinderApiHandler, CitiesApiHandler, db
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='frontend/client-app/build')
+
+api = Api(app)
+
+un = 'postgres'
+pw = 'postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{un}:{pw}@localhost:5432/vacation_helper'
+
+db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 @app.route("/")
 def main():
-    return '''
-     <form action="/echo_user_input" method="POST">
-         <select name="city" id="city-select">
-          <option value="">--Please choose a Departure City--</option>
-          <option value="Los Angeles">Los Angeles</option>
-          <option value="Madison">Madison</option>
-          <option value="New York">New York</option>
-         </select>
-         <br>
-         Vacation Type: <br>
-         <input type="radio" id="Snow" name="vacation" value="Snow" checked >
-            <label for="Snow">Snow</label><br>
-            <input type="radio" id="Beach" name="vacation" value="Beach">
-            <label for="Beach">Beach</label><br>
-            <input type="radio" id="Hiking" name="vacation" value="Hiking">
-            <label for="Hiking">Hiking</label>
-         <br>
-         <input name="user_input" placeholder="Text to Echo">
-         <input type="submit" value="Submit">
-     </form>
-     '''
+    return send_from_directory(app.static_folder, 'index.html')
 
-@app.route("/echo_user_input", methods=["POST"])
-def echo_input():
-    city = request.form.get("city", "")
-    vacation_type = request.form.get("vacation", "")
-    input_text = request.form.get("user_input", "")
-    return f"User Input Echo: {input_text} <br> " \
-           f"Start City: {city} <br> " \
-           f"Suggested Destination City: {calcCity(vacation_type)} "
 
-def calcCity(vacation_type):
-    if vacation_type == "Snow":
-        return "Denver"
-    elif vacation_type == "Beach":
-        return "San Diego"
-    elif vacation_type == "Hiking":
-        return "Salk Lake City"
-    else:
-        return "New York"
+api.add_resource(CitiesApiHandler, '/cities')
+api.add_resource(VacationFinderApiHandler, '/VF/<string:airport>/<string:vac_type>')
