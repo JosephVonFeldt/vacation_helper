@@ -9,10 +9,15 @@ function SuggestedDestination() {
             {suggestion.filter(key => {
                 return key.POSSIBLE
             }).length > 0 ?
-                <List>{suggestion.map((key, i) => {
+                < List sx={{
+                    '& .MuiListItemButton-root:hover': {
+                        bgcolor: 'rgba(0,0,0,0.3)',
+                    },
+                }}>{suggestion.map((key, i) => {
                     if (key.POSSIBLE) {
-                        return <ListItem >
-                            <ListItemButton component="a" href={key.LINK} sx={{ border: 1, borderRadius: 4 }}>
+                        return <ListItem>
+                            <ListItemButton component="a" href={key.LINK}
+                                            sx={{border: 1, borderRadius: 4, backgroundColor: '#000000'}}>
                                 <ListItemText primary={key.CITY + ' $' + key.PRICE}/>
                             </ListItemButton>
                         </ListItem>;

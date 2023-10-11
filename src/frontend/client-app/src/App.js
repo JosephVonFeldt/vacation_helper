@@ -31,7 +31,7 @@ function App() {
                 main: "#cfb87c",
             },
             secondary: {
-                main: '#6b6963',
+                main: '#111111',
             },
         },
     });
