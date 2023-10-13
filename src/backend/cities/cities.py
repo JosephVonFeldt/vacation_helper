@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Resource
-from .dbHelper import db, Cities
+from ..dbHelper.dbHelper import db, Weather, Cities
 import os
 
 class CitiesApiHandler(Resource):

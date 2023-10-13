@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory
 from flask_restful import Api
 from backend.dataCollector import db
-from backend.cities import CitiesApiHandler
+from src.backend.cities import CitiesApiHandler
 from backend.flights import VacationFinderApiHandler
 import os
 
