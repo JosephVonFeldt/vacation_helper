@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from dataCollector import Cities, Weather, db
+from dbHelper import Cities, Weather, db
 from utils import days_until_friday
 from datetime import datetime, timedelta
 from weather import get_weather, set_weather, check_weather
