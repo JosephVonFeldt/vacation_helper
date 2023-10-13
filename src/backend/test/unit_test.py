@@ -1,4 +1,6 @@
-from ..weather import check_beach, check_snow, check_hiking, check_weather, Weather
+from ..dbHelper import Weather
+from ..weather import check_weather, check_hiking, check_snow, check_beach
+
 
 class TestClass:
     def test_hiking(self):
