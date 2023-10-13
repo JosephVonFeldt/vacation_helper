@@ -1,5 +1,5 @@
-from ..dbHelper import Weather
-from ..weather import check_weather, check_hiking, check_snow, check_beach
+from ..dbHelper.dbHelper import Weather
+from ..weather.weather import check_weather, check_hiking, check_snow, check_beach
 
 
 class TestClass:
