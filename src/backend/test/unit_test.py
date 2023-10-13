@@ -1,7 +1,6 @@
-from .. import dbHelper
+
 from ..dbHelper import *
 from ..weather import *
-
 
 
 class TestClass:
