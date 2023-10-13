@@ -1,9 +1,11 @@
 from flask import Flask, send_from_directory
 from flask_restful import Api
-from backend.dataCollector import db
+
 from src.backend.cities import CitiesApiHandler
-from backend.flights import VacationFinderApiHandler
+from src.backend.flights import VacationFinderApiHandler
 import os
+
+from src.backend.dbHelper import db
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/client-app/build')
 

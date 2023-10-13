@@ -2,8 +2,8 @@ import requests
 from flask import Flask
 from sqlalchemy.dialects.postgresql import insert
 from datetime import datetime
-from .dbHelper import db, Weather, Cities
-from .utils import days_until_friday
+from dbHelper import db, Weather, Cities
+from utils import days_until_friday
 import os
 import pika
 
