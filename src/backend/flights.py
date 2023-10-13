@@ -248,7 +248,8 @@ class VacationFinderApiHandler(Resource):
                     continue
                 arr.append({'CITY': result.city, "AP": result.destinationAirport, "POSSIBLE": True,
                             "PRICE": result.price, "LINK": result.link, "KEY": i})
-            return arr
+            db.session.close()
+        return arr
 
 
 if __name__ == "__main__":
