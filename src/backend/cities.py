@@ -7,8 +7,9 @@ class CitiesApiHandler(Resource):
     @staticmethod
     def get():
         app = Flask(__name__)
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/vacation_helper')
-
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL',
+                                                               'postgres://postgres:postgres@localhost:5432/vacation_helper').replace(
+            "://", "ql://", 1)
         db.init_app(app)
         with app.app_context():
             arr = []

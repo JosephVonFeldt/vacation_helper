@@ -11,8 +11,7 @@ app = Flask(__name__, static_url_path='', static_folder='frontend/client-app/bui
 
 api = Api(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/vacation_helper')
-
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://postgres:postgres@localhost:5432/vacation_helper').replace("://", "ql://", 1)
 db.init_app(app)
 with app.app_context():
     db.create_all()

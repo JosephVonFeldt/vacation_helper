@@ -227,8 +227,9 @@ class VacationFinderApiHandler(Resource):
     @staticmethod
     def get(airport, vac_type):
         app = Flask(__name__)
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/vacation_helper')
-
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL',
+                                                               'postgres://postgres:postgres@localhost:5432/vacation_helper').replace(
+            "://", "ql://", 1)
         db.init_app(app)
         with app.app_context():
             condition = False
@@ -252,8 +253,9 @@ class VacationFinderApiHandler(Resource):
 
 if __name__ == "__main__":
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/vacation_helper')
-
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL',
+                                                           'postgres://postgres:postgres@localhost:5432/vacation_helper').replace(
+        "://", "ql://", 1)
     db.init_app(app)
     with app.app_context():
         url = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/%2f')
