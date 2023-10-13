@@ -1,6 +1,4 @@
-
-from ..dataCollector import days_until_friday, check_beach, check_snow, check_hiking, check_weather, Weather
-
+from ..weather import check_beach, check_snow, check_hiking, check_weather, Weather
 
 class TestClass:
     def test_hiking(self):
@@ -27,3 +25,26 @@ class TestClass:
         w = Weather(city='test', state='TEST', snow=9, precipitation=9, temperature_min=20, temperature_max=45)
         assert not check_weather('Beach', w)
 
+    def test_hiking_dir(self):
+        w = Weather(city='test', state='TEST', snow=0, precipitation=1, temperature_min=50, temperature_max=85)
+        assert check_hiking(w)
+
+    def test_hiking_neg_dir(self):
+        w = Weather(city='test', state='TEST', snow=3, precipitation=3, temperature_min=20, temperature_max=45)
+        assert not check_hiking(w)
+
+    def test_snow_dir(self):
+        w = Weather(city='test', state='TEST', snow=3, precipitation=3, temperature_min=20, temperature_max=45)
+        assert check_snow(w)
+
+    def test_snow_neg_dir(self):
+        w = Weather(city='test', state='TEST', snow=9, precipitation=9, temperature_min=20, temperature_max=45)
+        assert not check_snow(w)
+
+    def test_beach_dir(self):
+        w = Weather(city='test', state='TEST', snow=0, precipitation=1, temperature_min=70, temperature_max=95)
+        assert check_beach(w)
+
+    def test_beach_neg_dir(self):
+        w = Weather(city='test', state='TEST', snow=9, precipitation=9, temperature_min=20, temperature_max=45)
+        assert not check_beach(w)

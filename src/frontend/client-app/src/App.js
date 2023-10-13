@@ -14,7 +14,7 @@ export const vacationContext = createContext();
 export const suggestionsContext = createContext();
 
 function onClick(selectedAirport, selectedVacation, setSuggestion, setHasSuggestion) {
-    axios.get(`http://127.0.0.1:5000/VF/${selectedAirport}/${selectedVacation}`).then(response => {
+    axios.get(`${window.location.origin}/VF/${selectedAirport}/${selectedVacation}`).then(response => {
         //console.log("SUCCESS", response)
         setSuggestion(response.data)
         setHasSuggestion(true)
@@ -36,7 +36,7 @@ function App() {
         },
     });
     const [selectedAirport, setSelectedAirport] = useState('DEN');
-    const [selectedVacation, setSelectedVacation] = useState('Snow');
+    const [selectedVacation, setSelectedVacation] = useState('Beach');
     const [suggestion, setSuggestion] = useState('');
     const [hasSuggestion, setHasSuggestion] = useState(false);
     let [cities, setCities] = useState([{'CITY': 'DENVER', "AP": "DEN", "KEY": 0}])
@@ -53,7 +53,7 @@ function App() {
 
     useEffect(() => {
         if (cities.length < 2) {
-            axios.get('http://127.0.0.1:5000/cities').then(response => {
+            axios.get(`${window.location.origin}/cities`).then(response => {
                 console.log("SUCCESS", response)
                 setCities(response.data)
             }).catch(error => {

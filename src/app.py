@@ -1,14 +1,15 @@
-from flask import Flask, request, send_from_directory
-from flask_restful import Api, Resource
-from backend.dataCollector import VacationFinderApiHandler, CitiesApiHandler, db
+from flask import Flask, send_from_directory
+from flask_restful import Api
+from backend.dataCollector import db
+from backend.cities import CitiesApiHandler
+from backend.flights import VacationFinderApiHandler
+import os
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/client-app/build')
 
 api = Api(app)
 
-un = 'postgres'
-pw = 'postgres'
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{un}:{pw}@localhost:5432/vacation_helper'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/vacation_helper')
 
 db.init_app(app)
 with app.app_context():
