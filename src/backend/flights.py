@@ -8,9 +8,12 @@ import json
 from flask import Flask
 from sqlalchemy.dialects.postgresql import insert
 
-from dbHelper import Cities, db, Weather, Flights
-from utils import days_until_friday
-from weather import check_snow, check_hiking, check_beach
+try:
+    from .dbHelper import Cities, db, Weather, Flights
+    from .utils import days_until_friday, check_snow, check_hiking, check_beach
+except:
+    from dbHelper import Cities, db, Weather, Flights
+    from utils import days_until_friday, check_snow, check_hiking, check_beach
 
 import pika
 

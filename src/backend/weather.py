@@ -2,8 +2,12 @@ import requests
 from flask import Flask
 from sqlalchemy.dialects.postgresql import insert
 from datetime import datetime
-from dbHelper import db, Weather, Cities
-from utils import days_until_friday
+try:
+    from .dbHelper import db, Weather, Cities
+    from .utils import days_until_friday
+except:
+    from dbHelper import db, Weather, Cities
+    from utils import days_until_friday
 import os
 import pika
 
@@ -38,26 +42,6 @@ def set_weather(city, state, response):
     db.session.execute(statement)
     db.session.commit()
     return w
-
-def check_weather(vac_type, weather):
-    if vac_type == 'Snow':
-        return check_snow(weather)
-    elif vac_type == 'Beach':
-        return check_beach(weather)
-    elif vac_type == 'Hiking':
-        return check_hiking(weather)
-
-
-def check_snow(weather):
-    return 0.5 < weather.snow < 7 and weather.temperature_max < 60 and weather.temperature_min < 32
-
-
-def check_beach(weather):
-    return weather.precipitation < 3 and 70 < weather.temperature_max and 50 < weather.temperature_min
-
-
-def check_hiking(weather):
-    return weather.precipitation < 2 and 70 < weather.temperature_max < 90 and 40 < weather.temperature_min
 
 
 if __name__ == "__main__":

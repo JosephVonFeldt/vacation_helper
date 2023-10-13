@@ -1,9 +1,12 @@
-from flask_restful import Resource
-from .dbHelper import Cities, Weather, db
-from .utils import days_until_friday
 from datetime import datetime, timedelta
-from .weather import get_weather, set_weather, check_weather
+
+from flask_restful import Resource
+
+from .dbHelper import Cities, Weather, db
 from .flights import get_flights, get_best_flight
+from .utils import check_weather, days_until_friday
+from .weather import get_weather, set_weather
+
 
 class VacationFinderApiHandler(Resource):
     @staticmethod
