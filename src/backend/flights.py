@@ -7,7 +7,7 @@ import json
 
 from flask import Flask
 from sqlalchemy.dialects.postgresql import insert
-from dataCollector import db, Weather, Cities, Flights
+from dbHelper import db, Weather, Cities, Flights
 from utils import days_until_friday
 from weather import check_snow, check_hiking, check_beach
 
