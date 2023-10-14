@@ -23,6 +23,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.9"
+        env: # Or as an environment variable
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
