@@ -174,6 +174,7 @@ def fetch_flights(departureAirport):
                       'datetime': datetime.utcnow()})
             db.session.execute(statement)
             db.session.commit()
+            db.session.close()
     for i, result in enumerate(query_results):
         if session_token_list[i]:
             time.sleep(1)
@@ -201,6 +202,7 @@ def fetch_flights(departureAirport):
                           'datetime': datetime.utcnow()})
                 db.session.execute(statement)
                 db.session.commit()
+                db.session.close()
     end = datetime.utcnow()
     print(f"End {end}")
     print(f"Duration {end-start}")
@@ -221,7 +223,7 @@ def get_suggested_flights(departureAirport, vac_type):
                                                                              Flights.price, Flights.link
                                                                              ).filter(condition).order_by(
         Cities.city.asc()).all()
-
+    db.session.close()
     for i, result in enumerate(query_results):
         arr.append({'CITY': result.city, "AP": result.airport, "POSSIBLE": True, "KEY": i, "PRICE": result.price, "LINK": result.link})
     return arr
