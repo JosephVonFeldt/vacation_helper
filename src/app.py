@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres
 db.init_app(app)
 with app.app_context():
     db.create_all()
-db.session.close()
+    db.session.close()
 @app.route("/")
 def main():
     return send_from_directory(app.static_folder, 'index.html')
