@@ -10,10 +10,10 @@ from sqlalchemy.dialects.postgresql import insert
 
 try:
     from .dbHelper import Cities, db, Weather, Flights
-    from .utils import days_until_friday, check_snow, check_hiking, check_beach
+    from .utils import days_until_friday, check_snow, check_hiking, check_beach, cleanup
 except:
     from dbHelper import Cities, db, Weather, Flights
-    from utils import days_until_friday, check_snow, check_hiking, check_beach
+    from utils import days_until_friday, check_snow, check_hiking, check_beach, cleanup
 
 import pika
 
@@ -237,6 +237,7 @@ class VacationFinderApiHandler(Resource):
             "://", "ql://", 1)
         db.init_app(app)
         with app.app_context():
+            engine_container = db.engine
             condition = False
             if vac_type == 'Snow':
                 condition = Flights.snow != ''
@@ -253,8 +254,7 @@ class VacationFinderApiHandler(Resource):
                     continue
                 arr.append({'CITY': result.city, "AP": result.destinationAirport, "POSSIBLE": True,
                             "PRICE": result.price, "LINK": result.link, "KEY": i})
-            db.session.close()
-
+            cleanup(db.session, engine_container)
         return arr
 
 
@@ -264,18 +264,27 @@ if __name__ == "__main__":
                                                            'postgres://postgres:postgres@localhost:5432/vacation_helper').replace(
         "://", "ql://", 1)
     db.init_app(app)
+
+    db.app = app
     with app.app_context():
-        url = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/%2f')
-        params = pika.URLParameters(url)
-        connection = pika.BlockingConnection(params)
-        channel = connection.channel()
-        channel.queue_declare("Flights")
-        def callback(ch, method, properties, body):
-            print(f" [x] Received {body.decode()}")
-            fetch_flights(body.decode())
+        try:
+            engine_container = db.get_engine(app)
+            url = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/%2f')
+            params = pika.URLParameters(url)
+            connection = pika.BlockingConnection(params)
+            channel = connection.channel()
+            channel.queue_declare("Flights")
+            def callback(ch, method, properties, body):
+                print(f" [x] Received {body.decode()}")
+                fetch_flights(body.decode())
 
-        channel.basic_consume(queue='Flights', on_message_callback=callback, auto_ack=True)
+            channel.basic_consume(queue='Flights', on_message_callback=callback, auto_ack=True)
 
-        print(' [*] Waiting for messages. To exit press CTRL+C')
-        channel.start_consuming()
-        channel.close()
+            print(' [*] Waiting for messages. To exit press CTRL+C')
+            channel.start_consuming()
+            channel.close()
+        except:
+            pass
+        finally:
+            cleanup(db.session, engine_container)
+

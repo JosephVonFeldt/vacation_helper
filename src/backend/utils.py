@@ -24,3 +24,7 @@ def check_beach(weather):
 
 def check_hiking(weather):
     return weather.precipitation < 2 and 70 < weather.temperature_max < 90 and 40 < weather.temperature_min
+
+def cleanup(session, engine_container):
+    session.close()
+    engine_container.dispose()
