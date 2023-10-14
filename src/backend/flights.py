@@ -111,24 +111,27 @@ def get_best_flight(data):
             link = item['deepLink']
     return price, link, session_token
 
-
-def fetch_flights(departureAirport):
-    start = datetime.utcnow()
-    print(f"Started {datetime.utcnow()}")
-    condition =  (Cities.beach != '') | (Cities.hiking != '') | (Cities.snow != '')
+def get_good_destinations():
+    condition = (Cities.beach != '') | (Cities.hiking != '') | (Cities.snow != '')
     subq = db.select(
         Weather.city, Weather.state, Weather.snow, Weather.precipitation,
         Weather.temperature_min, Weather.temperature_max,
         db.func.max(Weather.datetime).label("datetime")
     ).group_by(Weather.city, Weather.state)
     query_results = db.session.query(Cities) \
-        .join(Weather, Cities.city == Weather.city and Weather.state == subq.state, isouter=True).filter(condition).order_by(
+        .join(Weather, Cities.city == Weather.city and Weather.state == subq.state, isouter=True).filter(
+        condition).order_by(
         Weather.datetime.desc()) \
         .add_columns(Cities.city, Cities.state, Cities.latitude, Cities.longitude, Cities.airport,
                      Cities.snow.label("city_snow"),
                      Cities.beach, Cities.hiking, Weather.snow, Weather.precipitation,
                      Weather.temperature_min, Weather.temperature_max, Weather.datetime
                      ).order_by(Cities.city.asc()).all()
+    return query_results
+def fetch_flights(departureAirport):
+    start = datetime.utcnow()
+    print(f"Started {datetime.utcnow()}")
+    query_results = get_good_destinations()
     session_token_list = []
     for i, result in enumerate(query_results):
         w = Weather(city=result.city, state=result.state, snow=result.snow, precipitation=result.precipitation,
@@ -249,6 +252,7 @@ class VacationFinderApiHandler(Resource):
                 arr.append({'CITY': result.city, "AP": result.destinationAirport, "POSSIBLE": True,
                             "PRICE": result.price, "LINK": result.link, "KEY": i})
             db.session.close()
+
         return arr
 
 
