@@ -268,7 +268,7 @@ if __name__ == "__main__":
     db.app = app
     with app.app_context():
         try:
-            engine_container = db.get_engine(app)
+            engine_container = db.engine
             url = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/%2f')
             params = pika.URLParameters(url)
             connection = pika.BlockingConnection(params)
